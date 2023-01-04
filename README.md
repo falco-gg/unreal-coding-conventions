@@ -1,12 +1,8 @@
-# Unreal 4 Coding Conventions 1.0
+# Elysium Game Studio Unreal 5 Coding Conventions
 
-This document summarizes the high-level coding conventions for writing Unreal 4 client code at Daedalic Entertainment. They are based on the official Unreal Coding Standard:
-
-* https://docs.unrealengine.com/latest/INT/Programming/Development/CodingStandard/index.html
+This document summarizes the high-level coding conventions for writing Unreal client code at Elysium Game Studio. They are based on the [DaedalicEntertainment coding conventions](https://github.com/DaedalicEntertainment/unreal-coding-conventions).
 
 The goal is to make it easier to work in similar teams inside and outside the company, as well as have client code blend in with other code of the Unreal API. We are providing a complete summary here in order to allow people to understand the conventions at a glance, instead of having to open multiple documents. Our coding conventions are numbered, which makes it easier to refer to them in code reviews.
-
-In case we've missed recent changes to the official Unreal Coding Standard, or you can spot any other issue, please [create a pull request](https://help.github.com/articles/creating-a-pull-request/).
 
 
 ## 1. Namespaces
@@ -32,35 +28,28 @@ In case we've missed recent changes to the official Unreal Coding Standard, or y
 
 2.3. __DO__ define classes with the following structure:
 
+* public constants
+* public static methods
 * constructors
 * destructor
-* public `override` functions (e.g. `BeginPlay`, `Tick`, `GetLifetimeReplicatedProps`)
-* public functions
-* public event handlers
-  * `virtual void Notify...` functions
-  * `UFUNCTION(BlueprintImplementableEvent) void Receive...` functions
-  * `UPROPERTY(BlueprintAssignable)` delegate properties
+* public methods (try to keep virtual methods, event handlers and regular functions groups together in their own section)
 * operators
-* public constants
 * public `UPROPERTY`s
-* protected `override` functions
-* protected functions
+* public fields
 * protected constants
+* protected methods (same consideration as public ones: try to separate virtual from non-virtual ones)
 * protected fields
-* private functions
 * private constants
+* private functions
 * private fields
 
-Within each of these groups, order members by name or logical groups.
+Within each of these groups, order members by logical groups when appropriate.
 
-2.4. __DO NOT__ cover more than a single feature in each file. Don't define more than one public type per file.
-
-2.5. __DO__ leave a blank line at the end of the file to play nice with gcc. 
-
+2.4. __DO NOT__ cover more than a single feature in each file. Don't define more than one public type per file
 
 ## 3. Includes
 
-3.1. __DO NOT__ include unused headers. This will generally help reduce the compilation time, especially for developers when just one header has been modified. It may also avoid errors that can be caused by conflicts between headers. If an object in the class is only used by pointer or by reference, it is not required to include the header for that object. Instead, just add a forward declaration before the class. 
+3.1. __DO NOT__ include unused headers. This will generally help reduce the compilation time, especially for developers when just one header has been modified. It may also avoid errors that can be caused by conflicts between headers. If an object in the class is only used by pointer or by reference, avoid `include`ing it and just add a forward declaration before the class. 
 
 3.2. __DO NOT__ rely on a header that is included indirectly by another header you include.
 
@@ -89,13 +78,15 @@ Within each of these groups, order members by name or logical groups.
 
 4.7. __DO__ use a non-virtual destructor in `final` classes unless they are already derived.
 
-4.8. __DO__ use `struct`s for data containers, only. They shouldn't contain any business logic beyond simple validation or need any destructors.
-
+4.8. __DO__ use `struct`s for data containers, only. They shouldn't contain any logic beyond simple validation or need any destructors.
 
 ## 5. Constructors
 
 5.1. __DO__ mark each constructor that takes exactly one argument as `explicit`, unless it's a copy constructor or the whole point of the constructor is to allow implicit casting. This minimizes wrong use of the constructor.
 
+5.2 __DO NOT__ define empty constructors/destructors that do nothing (with an empty body or with `= default`) unless required.
+
+5.3 __CONSIDER__ defining a deleted copy constructor/copy assignment operator for classes and structs that should not be copied (e.g. ones that contain a lot of data).
 
 ## 6. Functions
 
@@ -117,7 +108,7 @@ Within each of these groups, order members by name or logical groups.
 
 6.5. __DO__  flag methods as `const` if they do not modify the object.
 
-6.6. __CONSIDER__ writing functions with six parameters or less. For passing more arguments, try and use `structs` instead, and/or refactor your function.
+6.6. __CONSIDER__ writing functions with six parameters or less. For passing more arguments, pass instead a `struct` containing all the parameters (which sensible defaulted values), and/or refactor your function.
 
 6.7. __CONSIDER__ using enum values instead of boolean function parameters.
 
@@ -134,9 +125,9 @@ Within each of these groups, order members by name or logical groups.
 
 7.1. __DO__ use PascalCase for variable names.
 
-7.2. __AVOID__ short or meaningless names (e.g. `A`, `Rbarr`, `Nughdeget`). Single character variable names are only okay for counters and temporaries, where the purpose of the variable is obvious.
+7.2. __AVOID__ short or meaningless names (e.g. `A`, `Rbarr`, `Nughdeget`). Single character variable names are only okay for counters and temporaries, where the purpose of the variable is obvious. An exception to this rule are mathematical functions where the meaning of the parameters is "universally" known, such as `Lerp(float A, float B, float T)` or `Sin(float X)`.
 
-7.3. __DO NOT__ use negative names for boolean variables.
+7.3. __AVOID__ using negative names for boolean variables.
 
     // Right:
     if (bVisible)
@@ -167,19 +158,19 @@ Within each of these groups, order members by name or logical groups.
       AController* Instigator
       const FDamageEvent& DamageEvent
 
-7.7. __DO__ test whether a pointer is valid before dereferencing it. `nullptr` should be used instead of the C-style `NULL` macro in all cases. If the pointer points to any `UOBJECT`, use `IsValid` to ensures the pointer is not null and the referenced object is not marked for destruction.
+7.7. __DO__ test whether a pointer is valid before dereferencing it. `nullptr` should be used instead of the C-style `NULL` macro in all cases. If the pointer points to any `UOBJECT`, use `IsValid` to ensures the pointer is not null and the referenced object is not marked for destruction. 
 
 
 ## 8. Enums & Constants
 
-8.1. __CONSIDER__ using `enum class` over `static constexpr` over `static const` variables over `#define` when defining constants.
+8.1. __CONSIDER__ using `enum class` or `static constexpr` over `static const` variables over `#define` when defining constants.
 
 8.2. __DO__ use ALL_CAPS with underscores between words for constant names.
 
-
 ## 9. Indentation & Whitespaces
+// TODO: this entire section should be decided by the auto-formatter, meaningless to say it here.
 
-9.1. __DO__ use four spaces for indentation.
+9.1. __DO__ use tabs for indentation. 
 
 9.2. __DO__ use a single space after a keyword and before a parenthesis.
 
@@ -199,6 +190,7 @@ Within each of these groups, order members by name or logical groups.
 
 
 ## 10. Line Breaks
+// TODO: this entire section should be decided by the auto-formatter, meaningless to say it here.
 
 10.1. __CONSIDER__ keeping lines shorter than 100 characters; wrap if necessary.
 
@@ -231,6 +223,7 @@ Within each of these groups, order members by name or logical groups.
 
 
 ## 11. Braces
+// TODO: this entire section should be decided by the auto-formatter, meaningless to say it here.
 
 11.1. __DO__ put opening braces on their own lines:
 
@@ -291,7 +284,7 @@ Within each of these groups, order members by name or logical groups.
 
 ## 13. Control Flow
 
-13.1. __DO__ add a `break` (or `return`) statement at the end of every `case`, or a comment to indicate that there's intentionally no `break`, unless another `case` follows immediately within switch statements
+13.1. __DO__ add a `break` (or `return`) statement at the end of every `case`, or use `[[fallthrough]]`
 
       switch (MyEnumValue)
       {
@@ -302,12 +295,29 @@ Within each of these groups, order members by name or logical groups.
         case Value2:
         case Value3:
             DoSomethingElse();
-            // Fall through.
+            [[fallthrough]];
 
         default:
             DefaultHandling();
             break;
       }
+      
+13.1.1. __DO__ wrap switch cases in parentheses whenever you declare variables inside them
+
+      switch (MyVar)
+      {
+        case 42:
+        {
+            int X = 0;
+            Foo(X);
+            break;
+        }
+        
+        default:
+            break;
+      }
+      
+13.1.2. __DO__ add a `default` case at the end of every switch. If empty, either do `default: /* newline */ break;` or `default:;`.
 
 13.2. __DO NOT__ put `else` after jump statements:
 
@@ -339,14 +349,76 @@ Within each of these groups, order members by name or logical groups.
       // Wrong: Crashes on some compilers.
       for (Container::const_iterator it = c.begin(); it != c.end(); ++it)
 
+## 13 ½. General Style
+
+13 ½.1. __DO__ use the short form `if (Pointer)` over `if (Pointer != nullptr)`.
+
+13 ½.2. __DO__ use the short form `if (bBool)` and `if (!bBool)` over `if (bBool == true)` or `if (bBool == false)`.
+
+13 ½.3. __DO NOT__ use Yoda-style expressions:
+
+       // Good
+       if (MyHealth == 0) { ... }
+       if (MyHealth == SomeThing()) { ... }
+       
+       // Bad
+       if (0 == MyHealth) { ... }
+       if (SomeThing() == MyHealth) { ... }
+       
+13 ½.4. __AVOID__ too many indentation levels. If your function has a lot of indentation, you have 2 options:
+
+* if the high nesting is just due to error checking, consider replacing nesting with early returns/continues:
+
+        // Bad
+        if (Actor) 
+        {
+           if (IsAvailable(Actor))
+           {
+               for (AActor* OtherActor : Others)
+               {
+                   if (IsAvailable(OtherActor))
+                   {
+                       // ...
+                   }
+               }
+           }
+        }
+        
+        // Good
+        if (!Actor)
+        {
+            return;
+        }
+        
+        if (!IsAvailable(Actor))
+        {
+            return;
+        }
+        
+        for (AActor* OtherActor : Others)
+        {
+            if (!IsAvailable(OtherActor))
+            {
+                continue;
+            }
+        }
+        
+* if the nesting instead derives from complex subroutines of your function, consider splitting it into multiple functions.
 
 ## 14. Language Features
 
-14.1. __CONSIDER__ using the `auto` keyword when it avoids repetition of a type in the same statement, or when assigning iterator types. If in doubt, for example if using `auto` could make the code less readable, do not use `auto`.
+14.1. __AVOID__ using the `auto` keyword except when required by the language (e.g. assigning lambdas) or when assigning long iterator types. If in doubt, for example if using `auto` could make the code less readable, do not use `auto`.
 
-      auto* HealthComponent = FindComponentByClass<UHOATHealthComponent>();
+      // Bad
+      auto* HealthComponent = FindComponentByClass<USOCHealthComponent>();
+      
+      // Good
+      USOCHealthComponent* HealthComponent = FindComponentByClass<USOCHealthComponent>();
+      
+      TMap<UAVeryVeryLongTypeHere, FAnotherVeryLongTypeThere> Map;
+      for (auto it = Map.begin(); it != Map.end(); it++) { ... }
 
-14.2. __DO__ use `auto*` for auto pointers, to be consistent with references, and to add additional guidance for the reader.
+14.2. __DO__ use `auto*` for auto pointers, to be consistent with references, and to add additional guidance for the reader. Remember that `const auto*` and `const auto` mean different things when the type resolves to a pointer (and you usually want `const auto*`).
 
 14.3. __DO__ use proprietary types, such as `TArray` or `TMap` where possible. This avoids unnecessary and repeated type conversion while interacting with the Unreal Engine APIs.
 
@@ -354,11 +426,9 @@ Within each of these groups, order members by name or logical groups.
 
 ## 15. Events & Delegates
 
-15.1. __CONSIDER__ exposing meaningful events to subclasses and/or other interested listeners by defining virtual functions and/or multicast delegates.
+15.1. __DO__ define two functions when exposing an event to a subclass. The first function should be virtual and its name should begin with `Notify`. The second function should be a `BlueprintImplementableEvent UFUNCTION` and its name should begin with `Receive`. The default implementation of the virtual function should be to call the `BlueprintImplementableEvent` function (see `AActor::NotifyActorBeginOverlap` and `AActor::ReceiveActorBeginOverlap` for example).
 
-15.2. __DO__ define two functions when exposing an event to a subclass. The first function should be virtual and its name should begin with `Notify`. The second function should be a `BlueprintImplementableEvent UFUNCTION` and its name should begin with `Receive`. The default implementation of the virtual function should be to call the `BlueprintImplementableEvent` function (see `AActor::NotifyActorBeginOverlap` and `AActor::ReceiveActorBeginOverlap` for example).
-
-15.3. __DO__ call the virtual function before broadcasting the event, if both are defined (see `UPrimitiveComponent::BeginComponentOverlap` for example).
+15.2. __DO__ call the virtual function before broadcasting the event, if both are defined (see `UPrimitiveComponent::BeginComponentOverlap` for example).
 
 Example:
 
@@ -376,13 +446,13 @@ Example:
     FHoatActorGraphConnectivityChangedSignature OnConnectivityChanged;
 
 
-    void AHoatActorGraph::NotifyOnConnectivityChanged(AActor* Source, AActor* Target, float Distance)
+    void ASOCActorGraph::NotifyOnConnectivityChanged(AActor* Source, AActor* Target, float Distance)
     {
-    ReceiveOnConnectivityChanged(Source, Target, Distance);
-    OnConnectivityChanged.Broadcast(Source, Target, Distance);
+        ReceiveOnConnectivityChanged(Source, Target, Distance);
+        OnConnectivityChanged.Broadcast(Source, Target, Distance);
 
-    HOAT_LOG(hoat, Log, TEXT("%s changed the connectivity of vertex %s: Distance to target %s changed to %f."),
-            *GetName(), *Source->GetName(), *Target->GetName(), Distance);
+        SOC_LOG(hoat, Log, TEXT("%s changed the connectivity of vertex %s: Distance to target %s changed to %f."),
+                *GetName(), *Source->GetName(), *Target->GetName(), Distance);
     }
 
 ## 16. Comments
@@ -396,4 +466,4 @@ Example:
 
 ## 17. Additional Naming Conventions
 
-17.1. __DO NOT__ use any swearing in symbol names, comments or log output.
+17.1 (for SOC2): prefix all game-specific C++ public types with `SOC`.

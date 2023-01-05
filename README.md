@@ -168,89 +168,43 @@ Within each of these groups, order members by logical groups when appropriate.
 8.2. __DO__ use ALL_CAPS with underscores between words for constant names.
 
 ## 9. Indentation & Whitespaces
-// TODO: this entire section should be decided by the auto-formatter, meaningless to say it here.
 
-9.1. __DO__ use tabs for indentation. 
-
-9.2. __DO__ use a single space after a keyword and before a parenthesis.
-
-      // Right:
-      if (bVisible)
-      {
-      }
-
-      // Wrong:
-      if(bVisible)
-      {
-      }
-
-9.3. __DO__ surround binary operators with spaces.
-
-9.4. __DO NOT__ put multiple statements on one line.
+9.1. __DO NOT__ put multiple statements on one line.
 
 
 ## 10. Line Breaks
-// TODO: this entire section should be decided by the auto-formatter, meaningless to say it here.
 
-10.1. __CONSIDER__ keeping lines shorter than 100 characters; wrap if necessary.
-
-10.2. __DO__ use a new line for the body of a control flow statement:
-
-      // Right:
-      if (bVisible)
-      {
-          Hide();
-      }
-
-      // Wrong:
-      if (bVisible) Hide();
-
-10.3. __DO__ start operators at the beginning of the new lines.
-
-      // Right:
-      if (longExpression
-          + otherLongExpression
-          + otherOtherLongExpression)
-      {
-      }
-
-      // Wrong: Operator at the end of the line is easy to miss if the editor is too narrow.
-      if (longExpression +
-          otherLongExpression +
-          otherOtherLongExpression)
-      {
-      }
-
+10.1 __DO__ separate function bodies with at least one newline.
+     // Right
+     int Foo()
+     {
+         // ...
+     }
+     
+     void Bar() {}
+     
+     // Wrong
+     int Foo()
+     {
+         // ...
+     }
+     void Bar() {}
+    
+Exception: when you group together multiple related class methods you should omit the newline:
+    
+    // Also right
+    class C
+    {
+        ...
+        
+        int GetHeight() const { return Height; }
+        int GetWidth() const { return Width; }
+    };
 
 ## 11. Braces
 // TODO: this entire section should be decided by the auto-formatter, meaningless to say it here.
 
-11.1. __DO__ put opening braces on their own lines:
-
-      // Right:
-      if (bVisible)
-      {
-      }
-      else
-      {
-      }
-
-      // Wrong:
-      if (bVisible) {
-      } else {
-      }
-
-11.2. __DO__ have the left brace on the start of a line for class declarations and function definitions:
-
-      void AHOATCharacter::Tick(float DeltaSeconds)
-      {
-      }
-
-      class Moo
-      {
-      };
-
-11.3. __DO__ use curly braces, even if the body of a conditional statement contains just one line:
+11.1. __DO__ use curly braces, even if the body of a conditional statement contains just one line:
 
       // Right:
       if (bVisible)

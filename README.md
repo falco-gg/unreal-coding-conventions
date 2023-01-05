@@ -419,4 +419,4 @@ Example:
 
 ## 17. Additional Naming Conventions
 
-17.1 (for SOC2): prefix all game-specific C++ public types with `SOC`.
+17.1 (for SOCS2): prefix all game-specific C++ public types with `SOC`.

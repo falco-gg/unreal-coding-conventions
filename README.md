@@ -202,7 +202,6 @@ Exception: when you group together multiple related class methods you should omi
     };
 
 ## 11. Braces
-// TODO: this entire section should be decided by the auto-formatter, meaningless to say it here.
 
 11.1. __DO__ use curly braces, even if the body of a conditional statement contains just one line:
 

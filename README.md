@@ -377,6 +377,8 @@ Exception: when you group together multiple related class methods you should omi
 
 14.4. __DO__ use the `TEXT()` macro around string literals. Without it, code which constructs `FString`s from literals will cause an undesirable string conversion process. 
 
+14.5. __CONSIDER__ using file-local helper functions where it makes sense. In that case, declare them inside an anonymous namespace to indicate that they're private to that cpp file.
+
 ## 15. Events & Delegates
 
 15.1. __DO__ define two functions when exposing an event to a subclass. The first function should be virtual and its name should begin with `Notify`. The second function should be a `BlueprintImplementableEvent UFUNCTION` and its name should begin with `Receive`. The default implementation of the virtual function should be to call the `BlueprintImplementableEvent` function (see `AActor::NotifyActorBeginOverlap` and `AActor::ReceiveActorBeginOverlap` for example).

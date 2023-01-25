@@ -379,6 +379,9 @@ Exception: when you group together multiple related class methods you should omi
 
 14.5. __CONSIDER__ using file-local helper functions where it makes sense. In that case, declare them inside an anonymous namespace to indicate that they're private to that cpp file.
 
+14.6. __DO__ use `[[maybe_unused]]` for functions and variables that are only used in conditionally-compiled code (e.g. some that are only used inside `check` macros).
+
+
 ## 15. Events & Delegates
 
 15.1. __DO__ define two functions when exposing an event to a subclass. The first function should be virtual and its name should begin with `Notify`. The second function should be a `BlueprintImplementableEvent UFUNCTION` and its name should begin with `Receive`. The default implementation of the virtual function should be to call the `BlueprintImplementableEvent` function (see `AActor::NotifyActorBeginOverlap` and `AActor::ReceiveActorBeginOverlap` for example).

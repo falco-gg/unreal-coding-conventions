@@ -120,6 +120,7 @@ Within each of these groups, order members by logical groups when appropriate.
 
 6.8. __AVOID__ providing function implementations in header files. Use inline functions judiciously, as they force rebuilds even in files which don't use them. Inlining should only be used for trivial accessors and when profiling shows there is a benefit to doing so. Be even more conservative in the use of FORCEINLINE. All code and local variables will be expanded out into the calling function and will cause the same build time problems caused by large functions. Don't use inlining or templates for functions which are likely to change over a hot reload.
 
+6.9. __AVOID__ using BlueprintPure for functions that do non-trivial amount of work. Keep in mind that Pure functions don't cache their results, so it's easy to do a lot of duplicated work by misusing them in Blueprints.
 
 ## 7. Variables
 

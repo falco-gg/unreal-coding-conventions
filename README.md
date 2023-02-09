@@ -382,7 +382,7 @@ Exception: when you group together multiple related class methods you should omi
 
 14.6. __DO__ use `[[maybe_unused]]` for functions and variables that are only used in conditionally-compiled code (e.g. some that are only used inside `check` macros).
 
-## 15 
+## 15 Casting
 
 15.1. __DO__ use C++-style casts (`static_cast`, `const_cast`, `reinterpret_cast`) over C-style casts.
 

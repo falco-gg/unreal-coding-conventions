@@ -382,12 +382,20 @@ Exception: when you group together multiple related class methods you should omi
 
 14.6. __DO__ use `[[maybe_unused]]` for functions and variables that are only used in conditionally-compiled code (e.g. some that are only used inside `check` macros).
 
+## 15 
 
-## 15. Events & Delegates
+15.1. __DO__ use C++-style casts (`static_cast`, `const_cast`, `reinterpret_cast`) over C-style casts.
 
-15.1. __DO__ define two functions when exposing an event to a subclass. The first function should be virtual and its name should begin with `Notify`. The second function should be a `BlueprintImplementableEvent UFUNCTION` and its name should begin with `Receive`. The default implementation of the virtual function should be to call the `BlueprintImplementableEvent` function (see `AActor::NotifyActorBeginOverlap` and `AActor::ReceiveActorBeginOverlap` for example).
+15.2. __DO NOT__ use `dynamic_cast` ever. Use `Cast` instead.
 
-15.2. __DO__ call the virtual function before broadcasting the event, if both are defined (see `UPrimitiveComponent::BeginComponentOverlap` for example).
+15.3. __CONSIDER__ using `CastChecked` over `Cast` when casting to a type that is guaranteed to be correct (i.e. if you don't need to check whether the object is really of that type AND the object is guaranteed not to be null).
+
+
+## 16. Events & Delegates
+
+16.1. __DO__ define two functions when exposing an event to a subclass. The first function should be virtual and its name should begin with `Notify`. The second function should be a `BlueprintImplementableEvent UFUNCTION` and its name should begin with `Receive`. The default implementation of the virtual function should be to call the `BlueprintImplementableEvent` function (see `AActor::NotifyActorBeginOverlap` and `AActor::ReceiveActorBeginOverlap` for example).
+
+16.2. __DO__ call the virtual function before broadcasting the event, if both are defined (see `UPrimitiveComponent::BeginComponentOverlap` for example).
 
 Example:
 
@@ -414,15 +422,15 @@ Example:
                 *GetName(), *Source->GetName(), *Target->GetName(), Distance);
     }
 
-## 16. Comments
+## 17. Comments
 
-16.1. __DO__ add a space after `//`.
+17.1. __DO__ add a space after `//`.
 
-16.2. __DO__ place the comment on a separate line, not at the end of a line of code.
+17.2. __DO__ place the comment on a separate line, not at the end of a line of code.
 
-16.3. __DO__ write API documentation with [Javadoc comments](https://docs.unrealengine.com/latest/INT/Programming/Development/CodingStandard/index.html#exampleformatting).
+17.3. __DO__ write API documentation with [Javadoc comments](https://docs.unrealengine.com/latest/INT/Programming/Development/CodingStandard/index.html#exampleformatting).
 
 
-## 17. Additional Naming Conventions
+## 18. Additional Naming Conventions
 
-17.1 (for SOCS2): prefix all game-specific C++ public types with `SOC`.
+18.1 (for SOCS2): prefix all game-specific C++ public types with `SOC`.

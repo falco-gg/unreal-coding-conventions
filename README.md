@@ -18,30 +18,51 @@ The goal is to make it easier to work in similar teams inside and outside the co
 
 2.2. __DO__ write header files with the following structure:
 
+Sort includes alphabetically between pre-compiled header and generated class header
+
 * `#pragma once`
+* line break
 * `#include` of the pre-compiled header, if any (e.g. `#include "HOATPCH.h"`)
 * `#include` of the base class header, if any (e.g. `#include "GameFramework/Character.h"`)
+* line break
 * `#include` of the generated class header (e.g. `#include "HOATCharacter.generated.h"`)
-* delegate declarations
+* line break
 * forward declarations for any referenced engine or game types
+* line break
+* delegate declarations
+* line break
 * type definition
 
 2.3. __DO__ define classes with the following structure:
 
+
+* Variables Section
 * public constants
-* public static methods
-* constructors
-* destructor
-* public methods (try to keep virtual methods, event handlers and regular functions groups together in their own section)
-* operators
-* public `UPROPERTY`s
+* public static
 * public fields
-* protected constants
-* protected methods (same consideration as public ones: try to separate virtual from non-virtual ones)
+* public `UPROPERTY`s
+
 * protected fields
-* private constants
-* private functions
+* same order as public fields
+
 * private fields
+* same order as public fields
+
+* Functions Section
+* public functions
+* ctor and dtor - I don't think I ever had to create a class with protected or private ctor/dtor in C++
+* operators
+* static methods
+* virtual overrides
+* virtuals
+* other functions
+* event handlers - methods starting with `Handle`
+
+* protected functions
+* same order as public functions
+
+* private functions
+* same order as public functions
 
 Within each of these groups, order members by logical groups when appropriate.
 
@@ -398,9 +419,25 @@ Exception: when you group together multiple related class methods you should omi
 16.2. __DO__ call the virtual function before broadcasting the event, if both are defined (see `UPrimitiveComponent::BeginComponentOverlap` for example).
 
 Example:
+    DECLARE_MULTICAST_DELEGATE_TwoParams(FAuthLoginCompleteSignature, bool /*bWasSuccessful*/, const FString& /*ErrorMessage*/);
+    typedef FAuthLoginCompleteSignature::FDelegate FAuthLoginCompleteDelegate;
+    
+    FAuthLoginCompleteDelegate OnLoginComplete;
+    
+    void FAuthLoginCompleteDelegate HandleLoginComplete(bool bWasSuccessful, const FString& ErrorMessage);
+    
+Example:
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FAuthLoginCompleteDelegateSignature, bool, bWasSuccessful, const FString&, ErrorMessage);
+    typedef FAuthLoginCompleteDelegateSignature::FDelegate FAuthLoginCompleteDelegate;
+    
+    FAuthLoginCompleteDelegate OnLoginComplete;
+    
+    void FAuthLoginCompleteDelegate HandleLoginComplete(bool bWasSuccessful, const FString& ErrorMessage);
+    
+Example:
 
     DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FHoatActorGraphConnectivityChangedSignature, AActor*, Source, AActor*, Target, float, Distance);
-
+    
     /** Event when the connectivity of an observed source vertex has changed. */
     virtual void NotifyOnConnectivityChanged(AActor* Source, AActor* Target, float Distance);
 
@@ -411,7 +448,6 @@ Example:
     /** Event when the connectivity of an observed source vertex has changed. */
     UPROPERTY(BlueprintAssignable)
     FHoatActorGraphConnectivityChangedSignature OnConnectivityChanged;
-
 
     void ASOCActorGraph::NotifyOnConnectivityChanged(AActor* Source, AActor* Target, float Distance)
     {

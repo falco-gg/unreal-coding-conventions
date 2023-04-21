@@ -37,32 +37,33 @@ Sort includes alphabetically between pre-compiled header and generated class hea
 
 
 * Variables Section
-* public constants
-* public static
-* public fields
-* public `UPROPERTY`s
+    * public
+        * constants
+        * static
+        * fields
+        * `UPROPERTY`s
 
-* protected fields
-* same order as public fields
+    * protected fields
+        * same order as public
 
-* private fields
-* same order as public fields
+    * private fields
+        * same order as public
 
 * Functions Section
-* public functions
-* ctor and dtor - I don't think I ever had to create a class with protected or private ctor/dtor in C++
-* operators
-* static methods
-* virtual overrides
-* virtuals
-* other functions
-* event handlers - methods starting with `Handle`
+    * public functions
+        * ctor and dtor - I don't think I ever had to create a class with protected or private ctor/dtor in C++
+        * operators
+        * static methods
+        * virtual overrides
+        * virtuals
+        * other functions
+        * event handlers - methods starting with `Handle`
 
-* protected functions
-* same order as public functions
+    * protected functions
+        * same order as public functions
 
-* private functions
-* same order as public functions
+    * private functions
+        * same order as public functions
 
 Within each of these groups, order members by logical groups when appropriate.
 
@@ -419,19 +420,14 @@ Exception: when you group together multiple related class methods you should omi
 16.2. __DO__ call the virtual function before broadcasting the event, if both are defined (see `UPrimitiveComponent::BeginComponentOverlap` for example).
 
 Example:
-    DECLARE_MULTICAST_DELEGATE_TwoParams(FAuthLoginCompleteSignature, bool /*bWasSuccessful*/, const FString& /*ErrorMessage*/);
-    typedef FAuthLoginCompleteSignature::FDelegate FAuthLoginCompleteDelegate;
+    // Multicast Delegate signature and optional typedef for the delegate - must include comment for parameters in delegate signature
+    DECLARE_MULTICAST_DELEGATE_TwoParams(FAuthOnLoginCompleteSignature, bool /*bWasSuccessful*/, const FString& /*ErrorMessage*/);
+    typedef FAuthOnLoginCompleteSignature::FDelegate FAuthOnLoginCompleteDelegate;
     
+    // Delegate and event variables should be prepended with On
     FAuthLoginCompleteDelegate OnLoginComplete;
     
-    void FAuthLoginCompleteDelegate HandleLoginComplete(bool bWasSuccessful, const FString& ErrorMessage);
-    
-Example:
-    DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FAuthLoginCompleteDelegateSignature, bool, bWasSuccessful, const FString&, ErrorMessage);
-    typedef FAuthLoginCompleteDelegateSignature::FDelegate FAuthLoginCompleteDelegate;
-    
-    FAuthLoginCompleteDelegate OnLoginComplete;
-    
+    // Handlers for delegates should be prepended with Handle
     void FAuthLoginCompleteDelegate HandleLoginComplete(bool bWasSuccessful, const FString& ErrorMessage);
     
 Example:
@@ -454,8 +450,7 @@ Example:
         ReceiveOnConnectivityChanged(Source, Target, Distance);
         OnConnectivityChanged.Broadcast(Source, Target, Distance);
 
-        SOC_LOG(hoat, Log, TEXT("%s changed the connectivity of vertex %s: Distance to target %s changed to %f."),
-                *GetName(), *Source->GetName(), *Target->GetName(), Distance);
+        SOC_LOG(hoat, Log, TEXT("%s changed the connectivity of vertex %s: Distance to target %s changed to %f."), *GetName(), *Source->GetName(), *Target->GetName(), Distance);
     }
 
 ## 17. Comments

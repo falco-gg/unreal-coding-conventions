@@ -1,6 +1,6 @@
-# Elysium Game Studio Unreal 5 Coding Conventions
+# Falco Unreal 5 Coding Conventions
 
-This document summarizes the high-level coding conventions for writing Unreal client code at Elysium Game Studio. They are based on the [DaedalicEntertainment coding conventions](https://github.com/DaedalicEntertainment/unreal-coding-conventions).
+This document summarizes the high-level coding conventions for writing Unreal client code at Falco. They are based on the [DaedalicEntertainment coding conventions](https://github.com/DaedalicEntertainment/unreal-coding-conventions).
 
 The goal is to make it easier to work in similar teams inside and outside the company, as well as have client code blend in with other code of the Unreal API. We are providing a complete summary here in order to allow people to understand the conventions at a glance, instead of having to open multiple documents. Our coding conventions are numbered, which makes it easier to refer to them in code reviews.
 

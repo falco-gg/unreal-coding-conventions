@@ -1,6 +1,6 @@
 # Falco Unreal 5 Coding Conventions
 
-This document summarizes the high-level coding conventions for writing Unreal client code at Falco. They are based on the [DaedalicEntertainment coding conventions](https://github.com/DaedalicEntertainment/unreal-coding-conventions).
+This document summarizes the high-level coding conventions for writing Unreal client code at Falco. They are based on the [Elysium-Game-Studio coding conventions](https://github.com/Elysium-Game-Studio/unreal-coding-conventions).
 
 The goal is to make it easier to work in similar teams inside and outside the company, as well as have client code blend in with other code of the Unreal API. We are providing a complete summary here in order to allow people to understand the conventions at a glance, instead of having to open multiple documents. Our coding conventions are numbered, which makes it easier to refer to them in code reviews.
 
@@ -101,6 +101,8 @@ Within each of these groups, order members by logical groups when appropriate.
 4.7. __DO__ use a non-virtual destructor in `final` classes unless they are already derived.
 
 4.8. __DO__ use `struct`s for data containers, only. They shouldn't contain any logic beyond simple validation or need any destructors.
+
+4.9. __DO__ use `TObjectPtr` instead of raw pointers for UObject pointer properties and container classes found in UCLASS and USTRUCT types. See [Migration Guide](https://docs.unrealengine.com/5.0/en-US/unreal-engine-5-migration-guide/).
 
 ## 5. Constructors
 

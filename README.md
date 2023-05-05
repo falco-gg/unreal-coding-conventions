@@ -1,3 +1,4 @@
+
 # Falco Unreal 5 Coding Conventions
 
 This document summarizes the high-level coding conventions for writing Unreal client code at Falco. They are based on the [Elysium-Game-Studio coding conventions](https://github.com/Elysium-Game-Studio/unreal-coding-conventions).
@@ -327,13 +328,13 @@ Exception: when you group together multiple related class methods you should omi
       // Wrong: Crashes on some compilers.
       for (Container::const_iterator it = c.begin(); it != c.end(); ++it)
 
-## 13 ½. General Style
+## 14. General Style
 
-13 ½.1. __DO__ use the short form `if (Pointer)` over `if (Pointer != nullptr)`.
+14.1. __DO__ use the short form `if (Pointer)` over `if (Pointer != nullptr)`.
 
-13 ½.2. __DO__ use the short form `if (bBool)` and `if (!bBool)` over `if (bBool == true)` or `if (bBool == false)`.
+14.2. __DO__ use the short form `if (bBool)` and `if (!bBool)` over `if (bBool == true)` or `if (bBool == false)`.
 
-13 ½.3. __DO NOT__ use Yoda-style expressions:
+14.3. __DO NOT__ use Yoda-style expressions:
 
        // Good
        if (MyHealth == 0) { ... }
@@ -343,7 +344,7 @@ Exception: when you group together multiple related class methods you should omi
        if (0 == MyHealth) { ... }
        if (SomeThing() == MyHealth) { ... }
        
-13 ½.4. __AVOID__ too many indentation levels. If your function has a lot of indentation, you have 2 options:
+14.4. __AVOID__ too many indentation levels. If your function has a lot of indentation, you have 2 options:
 
 * if the high nesting is just due to error checking, consider replacing nesting with early returns/continues:
 
@@ -383,9 +384,9 @@ Exception: when you group together multiple related class methods you should omi
         
 * if the nesting instead derives from complex subroutines of your function, consider splitting it into multiple functions.
 
-## 14. Language Features
+## 15. Language Features
 
-14.1. __AVOID__ using the `auto` keyword except when required by the language (e.g. assigning lambdas) or when assigning long iterator types. If in doubt, for example if using `auto` could make the code less readable, do not use `auto`.
+15.1. __AVOID__ using the `auto` keyword except when required by the language (e.g. assigning lambdas) or when assigning long iterator types. If in doubt, for example if using `auto` could make the code less readable, do not use `auto`.
 
       // Bad
       auto* HealthComponent = FindComponentByClass<USOCHealthComponent>();
@@ -396,30 +397,30 @@ Exception: when you group together multiple related class methods you should omi
       TMap<UAVeryVeryLongTypeHere, FAnotherVeryLongTypeThere> Map;
       for (auto it = Map.begin(); it != Map.end(); it++) { ... }
 
-14.2. __DO__ use `auto*` for auto pointers, to be consistent with references, and to add additional guidance for the reader. Remember that `const auto*` and `const auto` mean different things when the type resolves to a pointer (and you usually want `const auto*`).
+15.2. __DO__ use `auto*` for auto pointers, to be consistent with references, and to add additional guidance for the reader. Remember that `const auto*` and `const auto` mean different things when the type resolves to a pointer (and you usually want `const auto*`).
 
-14.3. __DO__ use proprietary types, such as `TArray` or `TMap` where possible. This avoids unnecessary and repeated type conversion while interacting with the Unreal Engine APIs.
+15.3. __DO__ use proprietary types, such as `TArray` or `TMap` where possible. This avoids unnecessary and repeated type conversion while interacting with the Unreal Engine APIs.
 
-14.4. __DO__ use the `TEXT()` macro around string literals. Without it, code which constructs `FString`s from literals will cause an undesirable string conversion process. 
+15.4. __DO__ use the `TEXT()` macro around string literals. Without it, code which constructs `FString`s from literals will cause an undesirable string conversion process. 
 
-14.5. __CONSIDER__ using file-local helper functions where it makes sense. In that case, declare them inside an anonymous namespace to indicate that they're private to that cpp file.
+15.5. __CONSIDER__ using file-local helper functions where it makes sense. In that case, declare them inside an anonymous namespace to indicate that they're private to that cpp file.
 
-14.6. __DO__ use `[[maybe_unused]]` for functions and variables that are only used in conditionally-compiled code (e.g. some that are only used inside `check` macros).
+15.6. __DO__ use `[[maybe_unused]]` for functions and variables that are only used in conditionally-compiled code (e.g. some that are only used inside `check` macros).
 
-## 15 Casting
+## 16. Casting
 
-15.1. __DO__ use C++-style casts (`static_cast`, `const_cast`, `reinterpret_cast`) over C-style casts.
+16.1. __DO__ use C++-style casts (`static_cast`, `const_cast`, `reinterpret_cast`) over C-style casts.
 
-15.2. __DO NOT__ use `dynamic_cast` ever. Use `Cast` instead.
+16.2. __DO NOT__ use `dynamic_cast` ever. Use `Cast` instead.
 
-15.3. __CONSIDER__ using `CastChecked` over `Cast` when casting to a type that is guaranteed to be correct (i.e. if you don't need to check whether the object is really of that type AND the object is guaranteed not to be null).
+16.3. __CONSIDER__ using `CastChecked` over `Cast` when casting to a type that is guaranteed to be correct (i.e. if you don't need to check whether the object is really of that type AND the object is guaranteed not to be null).
 
 
-## 16. Events & Delegates
+## 17. Events & Delegates
 
-16.1. __DO__ define two functions when exposing an event to a subclass. The first function should be virtual and its name should begin with `Notify`. The second function should be a `BlueprintImplementableEvent UFUNCTION` and its name should begin with `Receive`. The default implementation of the virtual function should be to call the `BlueprintImplementableEvent` function (see `AActor::NotifyActorBeginOverlap` and `AActor::ReceiveActorBeginOverlap` for example).
+17.1. __DO__ define two functions when exposing an event to a subclass. The first function should be virtual and its name should begin with `Notify`. The second function should be a `BlueprintImplementableEvent UFUNCTION` and its name should begin with `Receive`. The default implementation of the virtual function should be to call the `BlueprintImplementableEvent` function (see `AActor::NotifyActorBeginOverlap` and `AActor::ReceiveActorBeginOverlap` for example).
 
-16.2. __DO__ call the virtual function before broadcasting the event, if both are defined (see `UPrimitiveComponent::BeginComponentOverlap` for example).
+17.2. __DO__ call the virtual function before broadcasting the event, if both are defined (see `UPrimitiveComponent::BeginComponentOverlap` for example).
 
 Example:
     // Multicast Delegate signature and optional typedef for the delegate - must include comment for parameters in delegate signature
@@ -455,15 +456,15 @@ Example:
         SOC_LOG(hoat, Log, TEXT("%s changed the connectivity of vertex %s: Distance to target %s changed to %f."), *GetName(), *Source->GetName(), *Target->GetName(), Distance);
     }
 
-## 17. Comments
+## 18. Comments
 
-17.1. __DO__ add a space after `//`.
+18.1. __DO__ add a space after `//`.
 
-17.2. __DO__ place the comment on a separate line, not at the end of a line of code.
+18.2. __DO__ place the comment on a separate line, not at the end of a line of code.
 
-17.3. __DO__ write API documentation with [Javadoc comments](https://docs.unrealengine.com/latest/INT/Programming/Development/CodingStandard/index.html#exampleformatting).
+18.3. __DO__ write API documentation with [Javadoc comments](https://docs.unrealengine.com/latest/INT/Programming/Development/CodingStandard/index.html#exampleformatting).
 
 
-## 18. Additional Naming Conventions
+## 19. Additional Naming Conventions
 
-18.1 (for SOCS2): prefix all game-specific C++ public types with `SOC`.
+19.1 (for SOCS2): prefix all game-specific C++ public types with `SOC`.

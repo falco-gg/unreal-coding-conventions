@@ -1,6 +1,6 @@
-# Elysium Game Studio Unreal 5 Coding Conventions
+# Falco Unreal 5 Coding Conventions
 
-This document summarizes the high-level coding conventions for writing Unreal client code at Elysium Game Studio. They are based on the [DaedalicEntertainment coding conventions](https://github.com/DaedalicEntertainment/unreal-coding-conventions).
+This document summarizes the high-level coding conventions for writing Unreal client code at Falco. They are based on the [Elysium-Game-Studio coding conventions](https://github.com/Elysium-Game-Studio/unreal-coding-conventions).
 
 The goal is to make it easier to work in similar teams inside and outside the company, as well as have client code blend in with other code of the Unreal API. We are providing a complete summary here in order to allow people to understand the conventions at a glance, instead of having to open multiple documents. Our coding conventions are numbered, which makes it easier to refer to them in code reviews.
 
@@ -18,30 +18,52 @@ The goal is to make it easier to work in similar teams inside and outside the co
 
 2.2. __DO__ write header files with the following structure:
 
+Sort includes alphabetically between pre-compiled header and generated class header
+
 * `#pragma once`
+* line break
 * `#include` of the pre-compiled header, if any (e.g. `#include "HOATPCH.h"`)
 * `#include` of the base class header, if any (e.g. `#include "GameFramework/Character.h"`)
+* line break
 * `#include` of the generated class header (e.g. `#include "HOATCharacter.generated.h"`)
-* delegate declarations
+* line break
 * forward declarations for any referenced engine or game types
+* line break
+* delegate declarations
+* line break
 * type definition
 
 2.3. __DO__ define classes with the following structure:
 
-* public constants
-* public static methods
-* constructors
-* destructor
-* public methods (try to keep virtual methods, event handlers and regular functions groups together in their own section)
-* operators
-* public `UPROPERTY`s
-* public fields
-* protected constants
-* protected methods (same consideration as public ones: try to separate virtual from non-virtual ones)
-* protected fields
-* private constants
-* private functions
-* private fields
+
+* Variables Section
+    * public
+        * constants
+        * static
+        * fields
+        * `UPROPERTY`s
+
+    * protected fields
+        * same order as public
+
+    * private fields
+        * same order as public
+
+* Functions Section
+    * public functions
+        * ctor and dtor - I don't think I ever had to create a class with protected or private ctor/dtor in C++
+        * operators
+        * static methods
+        * virtual overrides
+        * virtuals
+        * other functions
+        * event handlers - methods starting with `Handle`
+
+    * protected functions
+        * same order as public functions
+
+    * private functions
+        * same order as public functions
 
 Within each of these groups, order members by logical groups when appropriate.
 
@@ -79,6 +101,8 @@ Within each of these groups, order members by logical groups when appropriate.
 4.7. __DO__ use a non-virtual destructor in `final` classes unless they are already derived.
 
 4.8. __DO__ use `struct`s for data containers, only. They shouldn't contain any logic beyond simple validation or need any destructors.
+
+4.9. __DO__ use `TObjectPtr` instead of raw pointers for UObject pointer properties and container classes found in UCLASS and USTRUCT types. See [Migration Guide](https://docs.unrealengine.com/5.0/en-US/unreal-engine-5-migration-guide/).
 
 ## 5. Constructors
 
@@ -398,9 +422,20 @@ Exception: when you group together multiple related class methods you should omi
 16.2. __DO__ call the virtual function before broadcasting the event, if both are defined (see `UPrimitiveComponent::BeginComponentOverlap` for example).
 
 Example:
+    // Multicast Delegate signature and optional typedef for the delegate - must include comment for parameters in delegate signature
+    DECLARE_MULTICAST_DELEGATE_TwoParams(FAuthOnLoginCompleteSignature, bool /*bWasSuccessful*/, const FString& /*ErrorMessage*/);
+    typedef FAuthOnLoginCompleteSignature::FDelegate FAuthOnLoginCompleteDelegate;
+    
+    // Delegate and event variables should be prepended with On
+    FAuthLoginCompleteDelegate OnLoginComplete;
+    
+    // Handlers for delegates should be prepended with Handle
+    void FAuthLoginCompleteDelegate HandleLoginComplete(bool bWasSuccessful, const FString& ErrorMessage);
+    
+Example:
 
     DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FHoatActorGraphConnectivityChangedSignature, AActor*, Source, AActor*, Target, float, Distance);
-
+    
     /** Event when the connectivity of an observed source vertex has changed. */
     virtual void NotifyOnConnectivityChanged(AActor* Source, AActor* Target, float Distance);
 
@@ -412,14 +447,12 @@ Example:
     UPROPERTY(BlueprintAssignable)
     FHoatActorGraphConnectivityChangedSignature OnConnectivityChanged;
 
-
     void ASOCActorGraph::NotifyOnConnectivityChanged(AActor* Source, AActor* Target, float Distance)
     {
         ReceiveOnConnectivityChanged(Source, Target, Distance);
         OnConnectivityChanged.Broadcast(Source, Target, Distance);
 
-        SOC_LOG(hoat, Log, TEXT("%s changed the connectivity of vertex %s: Distance to target %s changed to %f."),
-                *GetName(), *Source->GetName(), *Target->GetName(), Distance);
+        SOC_LOG(hoat, Log, TEXT("%s changed the connectivity of vertex %s: Distance to target %s changed to %f."), *GetName(), *Source->GetName(), *Target->GetName(), Distance);
     }
 
 ## 17. Comments

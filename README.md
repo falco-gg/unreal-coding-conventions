@@ -149,7 +149,7 @@ Within each of these groups, order members by logical groups when appropriate.
 
 ## 7. Variables
 
-7.1. __DO__ use PascalCase for variable names.
+7.1. __DO__ use Pascal Case (ClassVariable) for class variable names. Use Camel Case (myVariable) for local variables names. This will make it easy to differentiate local vs class variables when glancing at code and when doing code-reviews.
 
 7.2. __AVOID__ short or meaningless names (e.g. `A`, `Rbarr`, `Nughdeget`). Single character variable names are only okay for counters and temporaries, where the purpose of the variable is obvious. An exception to this rule are mathematical functions where the meaning of the parameters is "universally" known, such as `Lerp(float A, float B, float T)` or `Sin(float X)`.
 

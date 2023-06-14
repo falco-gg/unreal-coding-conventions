@@ -21,6 +21,8 @@ The goal is to make it easier to work in similar teams inside and outside the co
 
 2.3. __DO__ write header files with the following structure:
 
+* copyright notice
+* line break
 * `#pragma once`
 * line break
 * `#include` of the `CoreMinimal` file

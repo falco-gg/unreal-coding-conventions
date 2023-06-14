@@ -54,11 +54,11 @@ Sort includes alphabetically between pre-compiled header and generated class hea
     * public functions
         * ctor and dtor
         * operators
-        * static methods
+        * statics
         * virtual overrides
         * virtuals
         * other functions
-        * event handlers - methods starting with `Handle`
+        * event handlers - functions starting with `Handle`
 
     * protected functions
         * same order as public functions

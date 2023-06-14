@@ -66,6 +66,8 @@ Sort includes alphabetically between pre-compiled header and generated class hea
     * private functions
         * same order as public functions
 
+Always put blank lines between each of the members.
+
 Within each of these groups, order members by logical groups when appropriate.
 
 2.4. __DO NOT__ cover more than a single feature in each file. Don't define more than one public type per file

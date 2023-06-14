@@ -36,6 +36,38 @@ The goal is to make it easier to work in similar teams inside and outside the co
 * line break
 * type definition
 
+```cpp
+// Copyright FALCO CAYMAN. All Rights Reserved.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "AbilitySystemInterface.h"
+#include "GameFramework/Character.h"
+
+#include "THCharacter.generated.h"
+
+class UAbilitySystemComponent;
+
+class UStateTreeComponent;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTHCharacterDamageSufferedSignature, ATHCharacter*, Character);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTHCharacterDeathSignature, ATHCharacter*, Character);
+
+USTRUCT(BlueprintType)
+struct THEHARVEST_API FTHAbilityDefinition
+{
+    // ...
+};
+
+UCLASS()
+class THEHARVEST_API ATHCharacter : public ACharacter, public IAbilitySystemInterface
+{
+    // ...
+};
+```
+
 2.3. __DO__ define classes with the following structure:
 
 

@@ -104,6 +104,75 @@ Always put blank lines between each of the members.
 
 Within each of these groups, order members by logical groups when appropriate.
 
+```cpp
+UCLASS()
+class THEHARVEST_API ATHCharacter : public ACharacter, public IAbilitySystemInterface
+{
+    GENERATED_BODY()
+
+public:
+    UPROPERTY(BlueprintAssignable)
+    FTHCharacterDamageSufferedSignature OnDamageSuffered;
+
+    UPROPERTY(BlueprintAssignable)
+    FTHCharacterDeathSignature OnDeath;
+
+protected:
+    // ...
+
+private:
+    constexpr float MovementThreshold = 1.0f;
+
+    static FName MovementComponentName;
+
+    int32 KillCount;
+
+    int32 DeathCount;
+
+    FTimerHandle RespawnTimerHandle;
+
+    UPROPERTY(Category="The Harvest", EditDefaultsOnly, BlueprintReadOnly, meta=(AllowPrivateAccess))
+    int32 MaxHealth;
+
+    UPROPERTY(Category="The Harvest", EditDefaultsOnly, BlueprintReadOnly, meta=(AllowPrivateAccess))
+    int32 Damage;
+
+    UPROPERTY(Category="The Harvest", EditDefaultsOnly, BlueprintReadOnly, meta=(AllowPrivateAccess))
+    TObjectPtr<UAnimMontage> AttackMontage;
+
+    UPROPERTY(Category="The Harvest", VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess))
+    TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
+
+    UPROPERTY(Category="The Harvest", VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess))
+    TObjectPtr<UCharacterMovementComponent> MovementComponent;
+
+public:
+    ATHCharacter();
+
+    static UAbilitySystemComponent* GetAbilitySystemComponentFromCharacter(...);
+
+    virtual void BeginPlay() override;
+
+    virtual void Tick(float DeltaSeconds) override;
+    
+    virtual void Attack();
+
+    virtual void Die();
+
+    void ApplyEffect(...);
+
+protected:
+    // ...
+
+private:
+    void DoSomething();
+
+    void HandleHealthAttributeChanged(...);
+
+    void HandleStaminaAttributeChanged(...);
+};
+```
+
 2.4. __DO NOT__ cover more than a single feature in each file. Don't define more than one public type per file
 
 ## 3. Includes

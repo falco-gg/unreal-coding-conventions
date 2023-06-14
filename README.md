@@ -105,7 +105,7 @@ Within each of these groups, order members by logical groups when appropriate.
 
 4.8. __DO__ use `struct`s for data containers, only. They shouldn't contain any logic beyond simple validation or need any destructors.
 
-4.9. __DO__ use `TObjectPtr` instead of raw pointers for UObject pointer properties and container classes found in UCLASS and USTRUCT types. See [Migration Guide](https://docs.unrealengine.com/5.0/en-US/unreal-engine-5-migration-guide/).
+4.9. __DO__ use `TObjectPtr` instead of raw pointers for UObject pointer properties and container classes found in `UCLASS` and `USTRUCT` types. See [Migration Guide](https://docs.unrealengine.com/5.0/en-US/unreal-engine-5-migration-guide/).
 
 ## 5. Constructors
 

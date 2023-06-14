@@ -52,7 +52,7 @@ Sort includes alphabetically between pre-compiled header and generated class hea
 
 * Functions Section
     * public functions
-        * ctor and dtor - I don't think I ever had to create a class with protected or private ctor/dtor in C++
+        * ctor and dtor
         * operators
         * static methods
         * virtual overrides

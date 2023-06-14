@@ -17,13 +17,12 @@ The goal is to make it easier to work in similar teams inside and outside the co
 
 2.1. __DO__ use PascalCase for file names, with the project name prefix, but without the type prefix (e.g. `AHOATCharacter` goes into `HOATCharacter.h`).
 
-2.2. __DO__ write header files with the following structure:
+2.2. __DO__ sort includes alphabetically between the ``CoreMinimal`` and the generated class header files
 
-Sort includes alphabetically between pre-compiled header and generated class header
+2.3. __DO__ write header files with the following structure:
 
 * `#pragma once`
 * line break
-* `#include` of the pre-compiled header, if any (e.g. `#include "HOATPCH.h"`)
 * `#include` of the base class header, if any (e.g. `#include "GameFramework/Character.h"`)
 * line break
 * `#include` of the generated class header (e.g. `#include "HOATCharacter.generated.h"`)

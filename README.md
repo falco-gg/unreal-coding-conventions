@@ -28,7 +28,7 @@ Sort includes alphabetically between pre-compiled header and generated class hea
 * line break
 * `#include` of the generated class header (e.g. `#include "HOATCharacter.generated.h"`)
 * line break
-* forward declarations for any referenced engine or game types
+* forward declarations for any referenced engine or game types with line break between each of them
 * line break
 * delegate declarations
 * line break

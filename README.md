@@ -23,6 +23,7 @@ The goal is to make it easier to work in similar teams inside and outside the co
 
 * `#pragma once`
 * line break
+* `#include` of the `CoreMinimal` file
 * `#include` of the base class header, if any (e.g. `#include "GameFramework/Character.h"`)
 * line break
 * `#include` of the generated class header (e.g. `#include "HOATCharacter.generated.h"`)

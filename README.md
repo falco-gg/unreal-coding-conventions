@@ -302,6 +302,7 @@ private:
 
 9.1. __DO NOT__ put multiple statements on one line.
 9.2 __DO__ put spaces between statements, parenthesis, braces and operators
+    
     // Right
     void Bar() {}
     for (int i = 0; i <= 10; i++)
